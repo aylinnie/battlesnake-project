@@ -189,7 +189,7 @@ public class Snake {
             JsonNode food = moveRequest.get("board").get("food");
 
             ArrayList<String> newMoves = findAllEdges(head, possibleMoves, board_height.asInt(), board_width.asInt());
-
+            newMoves = avoidMyNeck(head, body, newMoves);
             // Choose a random direction to move in
             final int choice = new Random().nextInt(newMoves.size());
             final String move = newMoves.get(choice);
@@ -210,7 +210,7 @@ public class Snake {
          *                      {"x": 2, "y": 0} ]
          * @param possibleMoves ArrayList of String. Moves to pick from.
          */
-        public void avoidMyNeck(JsonNode head, JsonNode body, ArrayList<String> possibleMoves) {
+        public ArrayList<String> avoidMyNeck(JsonNode head, JsonNode body, ArrayList<String> possibleMoves) {
             JsonNode neck = body.get(1);
 
             if (neck.get("x").asInt() < head.get("x").asInt()) {
@@ -222,6 +222,8 @@ public class Snake {
             } else if (neck.get("y").asInt() > head.get("y").asInt()) {
                 possibleMoves.remove("up");
             }
+
+            return possibleMoves;
         }
 
         /**
@@ -245,6 +247,8 @@ public class Snake {
          *
          * @param head
          * @param possibleMoves
+         * @param board_height
+         * @param board_width
          * @return possible moves
          */
         public ArrayList<String> findAllEdges(JsonNode head, ArrayList<String> possibleMoves, int board_height, int board_width) {
