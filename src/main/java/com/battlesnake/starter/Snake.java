@@ -267,11 +267,11 @@ public class Snake {
         public void avoidMyBody(JsonNode head, JsonNode body, ArrayList<String> possibleMoves) {
             JsonNode butt = body.get(2);
 
-            if (butt.get("y").asInt() == head.get("y").asInt() + 1) {
+            if (head.get("y").asInt() == butt.get("y").asInt() + 1) {
                 possibleMoves.remove("up");
-            } else if (butt.get("y").asInt() == head.get("y").asInt() - 1) {
+            } else if (head.get("y").asInt() == butt.get("y").asInt() - 1) {
                 possibleMoves.remove("down");
-            }  else if (butt.get("x").asInt() == head.get("x").asInt() + 1) {
+            }  else if (head.get("x").asInt() == butt.get("x").asInt() + 1) {
                 possibleMoves.remove("right");
             }
         }
