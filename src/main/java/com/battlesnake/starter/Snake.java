@@ -178,7 +178,7 @@ public class Snake {
             // TODO Using information from 'moveRequest', don't let your Battlesnake pick a
             // move
             // that would hit its own body
-            avoidMyBody(head, body, possibleMoves);
+            avoidMyBody(head, body, newMoves);
             // TODO: Using information from 'moveRequest', don't let your Battlesnake pick a
             // move
             // that would collide with another Battlesnake
