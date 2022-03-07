@@ -175,10 +175,9 @@ public class Snake {
 
             ArrayList<String> newMoves = findAllEdges(head, possibleMoves, board_height.asInt(), board_width.asInt());
 
-            // TODO Using information from 'moveRequest', don't let your Battlesnake pick a
-            // move
-            // that would hit its own body
-            avoidMyBody(head, body, newMoves);
+            // avoid my body
+            ArrayList<String> lastMoves = avoidMyBody(head, body, newMoves);
+
             // TODO: Using information from 'moveRequest', don't let your Battlesnake pick a
             // move
             // that would collide with another Battlesnake
@@ -190,8 +189,8 @@ public class Snake {
 
 
             // Choose a random direction to move in
-            final int choice = new Random().nextInt(newMoves.size());
-            final String move = newMoves.get(choice);
+            final int choice = new Random().nextInt(lastMoves.size());
+            final String move = lastMoves.get(choice);
 
             LOG.info("MOVE {}", move);
 
@@ -264,7 +263,7 @@ public class Snake {
             return possibleMoves;
         }
 
-        public void avoidMyBody(JsonNode head, JsonNode body, ArrayList<String> possibleMoves) {
+        public ArrayList<String> avoidMyBody(JsonNode head, JsonNode body, ArrayList<String> possibleMoves) {
             JsonNode butt = body.get(2);
 
             if (head.get("y").asInt() == butt.get("y").asInt() + 1) {
@@ -276,6 +275,8 @@ public class Snake {
             } else if (head.get("x").asInt() == butt.get("x").asInt() - 1) {
                 possibleMoves.remove("left");
             }
+
+            return possibleMoves;
         }
     }
 
