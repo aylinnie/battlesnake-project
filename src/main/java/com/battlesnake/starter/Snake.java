@@ -264,16 +264,19 @@ public class Snake {
         }
 
         public ArrayList<String> avoidMyBody(JsonNode head, JsonNode body, ArrayList<String> possibleMoves) {
-            JsonNode butt = body.get(2);
 
-            if (head.get("y").asInt() == butt.get("y").asInt() + 1) {
-                possibleMoves.remove("up");
-            } else if (head.get("y").asInt() == butt.get("y").asInt() - 1) {
-                possibleMoves.remove("down");
-            } else if (head.get("x").asInt() == butt.get("x").asInt() + 1) {
-                possibleMoves.remove("right");
-            } else if (head.get("x").asInt() == butt.get("x").asInt() - 1) {
-                possibleMoves.remove("left");
+            for (int i = 1; i < body.size(); i++) {
+                JsonNode bodyPart = body.get(i);
+
+                if (head.get("y").asInt() == bodyPart.get("y").asInt() + 1) {
+                    possibleMoves.remove("up");
+                } else if (head.get("y").asInt() == bodyPart.get("y").asInt() - 1) {
+                    possibleMoves.remove("down");
+                } else if (head.get("x").asInt() == bodyPart.get("x").asInt() + 1) {
+                    possibleMoves.remove("right");
+                } else if (head.get("x").asInt() == bodyPart.get("x").asInt() - 1) {
+                    possibleMoves.remove("left");
+                }
             }
 
             return possibleMoves;
