@@ -33,7 +33,7 @@ public class SnakeTest {
     void indexTest() throws IOException {
 
         Map<String, String> response = handler.index();
-        assertEquals("#888888", response.get("color"));
+        assertEquals("#D8A7B1", response.get("color"));
         assertEquals("default", response.get("head"));
         assertEquals("default", response.get("tail"));
     }

@@ -159,9 +159,11 @@ public class Snake {
              * 
              */
 
+            // my snake position
             JsonNode head = moveRequest.get("you").get("head");
             JsonNode body = moveRequest.get("you").get("body");
 
+            // all possible moves
             ArrayList<String> possibleMoves = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
 
             // Don't allow your Battlesnake to move back in on it's own neck
@@ -170,6 +172,8 @@ public class Snake {
             // TODO: Using information from 'moveRequest', find the edges of the board and
             // don't
             // let your Battlesnake move beyond them board_height = ? board_width = ?
+            JsonNode board_height = moveRequest.get("board").get("height");
+            JsonNode board_width = moveRequest.get("board").get("width");
 
             // TODO Using information from 'moveRequest', don't let your Battlesnake pick a
             // move
@@ -182,10 +186,13 @@ public class Snake {
             // TODO: Using information from 'moveRequest', make your Battlesnake move
             // towards a
             // piece of food on the board
+            JsonNode food = moveRequest.get("board").get("food");
+
+            ArrayList<String> newMoves = findAllEdges(head, body, possibleMoves, board_height, board_width);
 
             // Choose a random direction to move in
-            final int choice = new Random().nextInt(possibleMoves.size());
-            final String move = possibleMoves.get(choice);
+            final int choice = new Random().nextInt(newMoves.size());
+            final String move = newMoves.get(choice);
 
             LOG.info("MOVE {}", move);
 
@@ -230,6 +237,29 @@ public class Snake {
         public Map<String, String> end(JsonNode endRequest) {
             LOG.info("END");
             return EMPTY;
+        }
+
+        /**
+         * Using information from 'moveRequest', find the edges of the board and
+         * don't let your Battlesnake move beyond them board_height = ? board_width = ?
+         *
+         * @param head
+         * @param body
+         * @param possibleMoves
+         * @return move array index
+         */
+        public ArrayList<String> findAllEdges(JsonNode head, JsonNode body, ArrayList<String> possibleMoves, JsonNode board_height, JsonNode board_width) {
+            if (head.get("y").asInt() == 0) {
+                possibleMoves.remove("down");
+            } else if (head.get("x").asInt() == 0) {
+                possibleMoves.remove("left");
+            } else if (head.get("y").asInt() == board_height.asInt()) {
+                possibleMoves.remove("up");
+            } else if (head.get("x").asInt() == board_width.asInt()) {
+                possibleMoves.remove("right");
+            }
+
+            return possibleMoves;
         }
     }
 
