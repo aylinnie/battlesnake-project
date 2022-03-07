@@ -271,8 +271,10 @@ public class Snake {
                 possibleMoves.remove("up");
             } else if (head.get("y").asInt() == butt.get("y").asInt() - 1) {
                 possibleMoves.remove("down");
-            }  else if (head.get("x").asInt() == butt.get("x").asInt() + 1) {
+            } else if (head.get("x").asInt() == butt.get("x").asInt() + 1) {
                 possibleMoves.remove("right");
+            } else if (head.get("x").asInt() == butt.get("x").asInt() - 1) {
+                possibleMoves.remove("left");
             }
         }
     }
