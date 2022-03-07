@@ -169,16 +169,16 @@ public class Snake {
             // Don't allow your Battlesnake to move back in on it's own neck
             avoidMyNeck(head, body, possibleMoves);
 
-            // TODO: Using information from 'moveRequest', find the edges of the board and
-            // don't
-            // let your Battlesnake move beyond them board_height = ? board_width = ?
+            // avoid the walls and edges
             JsonNode board_height = moveRequest.get("board").get("height");
             JsonNode board_width = moveRequest.get("board").get("width");
+
+            ArrayList<String> newMoves = findAllEdges(head, possibleMoves, board_height.asInt(), board_width.asInt());
 
             // TODO Using information from 'moveRequest', don't let your Battlesnake pick a
             // move
             // that would hit its own body
-
+            avoidMyBody(head, body, possibleMoves);
             // TODO: Using information from 'moveRequest', don't let your Battlesnake pick a
             // move
             // that would collide with another Battlesnake
@@ -188,12 +188,10 @@ public class Snake {
             // piece of food on the board
             JsonNode food = moveRequest.get("board").get("food");
 
-            ArrayList<String> newMoves = findAllEdges(head, possibleMoves, board_height.asInt(), board_width.asInt());
-            ArrayList<String> lastMoves = avoidMyNeck(head, body, newMoves);
 
             // Choose a random direction to move in
-            final int choice = new Random().nextInt(lastMoves.size());
-            final String move = lastMoves.get(choice);
+            final int choice = new Random().nextInt(newMoves.size());
+            final String move = newMoves.get(choice);
 
             LOG.info("MOVE {}", move);
 
@@ -264,6 +262,18 @@ public class Snake {
             }
 
             return possibleMoves;
+        }
+
+        public void avoidMyBody(JsonNode head, JsonNode body, ArrayList<String> possibleMoves) {
+            JsonNode butt = body.get(2);
+
+            if (butt.get("y").asInt() == head.get("y").asInt() + 1) {
+                possibleMoves.remove("up");
+            } else if (butt.get("y").asInt() == head.get("y").asInt() - 1) {
+                possibleMoves.remove("down");
+            }  else if (butt.get("x").asInt() == head.get("x").asInt() + 1) {
+                possibleMoves.remove("right");
+            }
         }
     }
 
