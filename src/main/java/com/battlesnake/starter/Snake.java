@@ -253,9 +253,9 @@ public class Snake {
                 possibleMoves.remove("down");
             } else if (head.get("x").asInt() == 0) {
                 possibleMoves.remove("left");
-            } else if (head.get("y").asInt() == board_height.asInt()) {
+            } else if (head.get("y").asInt() == board_height.asInt() - 1) {
                 possibleMoves.remove("up");
-            } else if (head.get("x").asInt() == board_width.asInt()) {
+            } else if (head.get("x").asInt() == board_width.asInt() - 1) {
                 possibleMoves.remove("right");
             }
 
