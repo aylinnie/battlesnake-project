@@ -188,7 +188,7 @@ public class Snake {
             // piece of food on the board
             JsonNode food = moveRequest.get("board").get("food");
 
-            ArrayList<String> newMoves = findAllEdges(head, body, possibleMoves, board_height, board_width);
+            ArrayList<String> newMoves = findAllEdges(head, possibleMoves, board_height.asInt(), board_width.asInt());
 
             // Choose a random direction to move in
             final int choice = new Random().nextInt(newMoves.size());
@@ -244,18 +244,17 @@ public class Snake {
          * don't let your Battlesnake move beyond them board_height = ? board_width = ?
          *
          * @param head
-         * @param body
          * @param possibleMoves
-         * @return move array index
+         * @return possible moves
          */
-        public ArrayList<String> findAllEdges(JsonNode head, JsonNode body, ArrayList<String> possibleMoves, JsonNode board_height, JsonNode board_width) {
+        public ArrayList<String> findAllEdges(JsonNode head, ArrayList<String> possibleMoves, int board_height, int board_width) {
             if (head.get("y").asInt() == 0) {
                 possibleMoves.remove("down");
-            } else if (head.get("x").asInt() == 0) {
+            } if (head.get("x").asInt() == 0) {
                 possibleMoves.remove("left");
-            } else if (head.get("y").asInt() == board_height.asInt() - 1) {
+            } if (head.get("y").asInt() == board_height - 1) {
                 possibleMoves.remove("up");
-            } else if (head.get("x").asInt() == board_width.asInt() - 1) {
+            } if (head.get("x").asInt() == board_width - 1 ) {
                 possibleMoves.remove("right");
             }
 

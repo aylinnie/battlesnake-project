@@ -142,4 +142,121 @@ public class SnakeTest {
         assertTrue(possibleMoves.size() == 3);
         assertTrue(possibleMoves.equals(expectedResult));
     }
+
+    @Test
+    void findAllEdgesTest() throws IOException {
+        JsonNode testHead = OBJECT_MAPPER.readTree("{\"x\": 5, \"y\": 5}");
+
+        ArrayList<String> possibleMoves = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
+        ArrayList<String> expectedResult = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
+
+        handler.findAllEdges(testHead, possibleMoves, 11, 11);
+
+        assertTrue(possibleMoves.size() == 4);
+        assertTrue(possibleMoves.equals(expectedResult));
+    }
+
+    @Test
+    void findLeftWallTest() throws IOException {
+        JsonNode testHead = OBJECT_MAPPER.readTree("{\"x\": 0, \"y\": 5}");
+
+        ArrayList<String> possibleMoves = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
+        ArrayList<String> expectedResult = new ArrayList<>(Arrays.asList("up", "down", "right"));
+
+        handler.findAllEdges(testHead, possibleMoves, 11, 11);
+
+        assertTrue(possibleMoves.size() == 3);
+        assertTrue(possibleMoves.equals(expectedResult));
+    }
+
+    @Test
+    void findTopWallTest() throws IOException {
+        JsonNode testHead = OBJECT_MAPPER.readTree("{\"x\": 5, \"y\": 10}");
+
+        ArrayList<String> possibleMoves = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
+        ArrayList<String> expectedResult = new ArrayList<>(Arrays.asList("down", "left", "right"));
+
+        handler.findAllEdges(testHead, possibleMoves, 11, 11);
+
+        assertTrue(possibleMoves.size() == 3);
+        assertTrue(possibleMoves.equals(expectedResult));
+    }
+
+    @Test
+    void findRightWallTest() throws IOException {
+        JsonNode testHead = OBJECT_MAPPER.readTree("{\"x\": 10, \"y\": 5}");
+
+        ArrayList<String> possibleMoves = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
+        ArrayList<String> expectedResult = new ArrayList<>(Arrays.asList("up", "down", "left"));
+
+        handler.findAllEdges(testHead, possibleMoves, 11, 11);
+
+        assertTrue(possibleMoves.size() == 3);
+        assertTrue(possibleMoves.equals(expectedResult));
+    }
+
+    @Test
+    void findBottomWallTest() throws IOException {
+        JsonNode testHead = OBJECT_MAPPER.readTree("{\"x\": 5, \"y\": 0}");
+
+        ArrayList<String> possibleMoves = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
+        ArrayList<String> expectedResult = new ArrayList<>(Arrays.asList("up", "left", "right"));
+
+        handler.findAllEdges(testHead, possibleMoves, 11, 11);
+
+        assertTrue(possibleMoves.size() == 3);
+        assertTrue(possibleMoves.equals(expectedResult));
+    }
+
+    @Test
+    void findLeftBottomEdgeTest() throws IOException {
+        JsonNode testHead = OBJECT_MAPPER.readTree("{\"x\": 0, \"y\": 0}");
+
+        ArrayList<String> possibleMoves = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
+        ArrayList<String> expectedResult = new ArrayList<>(Arrays.asList("up", "right"));
+
+        handler.findAllEdges(testHead, possibleMoves, 11, 11);
+
+        assertTrue(possibleMoves.size() == 2);
+        assertTrue(possibleMoves.equals(expectedResult));
+    }
+
+    @Test
+    void findLeftTopEdgeTest() throws IOException {
+        JsonNode testHead = OBJECT_MAPPER.readTree("{\"x\": 0, \"y\": 10}");
+
+        ArrayList<String> possibleMoves = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
+        ArrayList<String> expectedResult = new ArrayList<>(Arrays.asList("down", "right"));
+
+        handler.findAllEdges(testHead, possibleMoves, 11, 11);
+
+        assertTrue(possibleMoves.size() == 2);
+        assertTrue(possibleMoves.equals(expectedResult));
+    }
+
+    @Test
+    void findRightBottomEdgeTest() throws IOException {
+        JsonNode testHead = OBJECT_MAPPER.readTree("{\"x\": 10, \"y\": 0}");
+
+        ArrayList<String> possibleMoves = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
+        ArrayList<String> expectedResult = new ArrayList<>(Arrays.asList("up", "left"));
+
+        handler.findAllEdges(testHead, possibleMoves, 11, 11);
+
+        assertTrue(possibleMoves.size() == 2);
+        assertTrue(possibleMoves.equals(expectedResult));
+    }
+
+    @Test
+    void findRightTopEdgeTest() throws IOException {
+        JsonNode testHead = OBJECT_MAPPER.readTree("{\"x\": 10, \"y\": 10}");
+
+        ArrayList<String> possibleMoves = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
+        ArrayList<String> expectedResult = new ArrayList<>(Arrays.asList("down", "left"));
+
+        handler.findAllEdges(testHead, possibleMoves, 11, 11);
+
+        assertTrue(possibleMoves.size() == 2);
+        assertTrue(possibleMoves.equals(expectedResult));
+    }
 }
