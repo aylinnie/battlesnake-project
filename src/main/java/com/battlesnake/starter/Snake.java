@@ -189,10 +189,11 @@ public class Snake {
             JsonNode food = moveRequest.get("board").get("food");
 
             ArrayList<String> newMoves = findAllEdges(head, possibleMoves, board_height.asInt(), board_width.asInt());
-            newMoves = avoidMyNeck(head, body, newMoves);
+            ArrayList<String> lastMoves = avoidMyNeck(head, body, newMoves);
+
             // Choose a random direction to move in
-            final int choice = new Random().nextInt(newMoves.size());
-            final String move = newMoves.get(choice);
+            final int choice = new Random().nextInt(lastMoves.size());
+            final String move = lastMoves.get(choice);
 
             LOG.info("MOVE {}", move);
 
