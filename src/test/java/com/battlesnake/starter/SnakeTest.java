@@ -259,4 +259,34 @@ public class SnakeTest {
         assertTrue(possibleMoves.size() == 2);
         assertTrue(possibleMoves.equals(expectedResult));
     }
+
+    @Test
+    void avoidMyBodyLength3Test() throws IOException {
+        JsonNode testHead = OBJECT_MAPPER.readTree("{\"x\": 5, \"y\": 5}");
+        JsonNode testBody = OBJECT_MAPPER
+                .readTree("[{\"x\": 5, \"y\": 5}, {\"x\": 5, \"y\": 4}, {\"x\": 6, \"y\": 4}, {\"x\": 6, \"y\": 5}]");
+
+        ArrayList<String> possibleMoves = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
+        ArrayList<String> expectedResult = new ArrayList<>(Arrays.asList("up", "down", "left"));
+
+        handler.avoidMyBody(testHead, testBody, possibleMoves);
+
+        assertTrue(possibleMoves.size() == 3);
+        assertTrue(possibleMoves.equals(expectedResult));
+    }
+
+    @Test
+    void avoidMyBodyLength4Test() throws IOException {
+        JsonNode testHead = OBJECT_MAPPER.readTree("{\"x\": 5, \"y\": 5}");
+        JsonNode testBody = OBJECT_MAPPER
+                .readTree("[{\"x\": 5, \"y\": 5}, {\"x\": 5, \"y\": 4}, {\"x\": 6, \"y\": 4}, {\"x\": 6, \"y\": 5}, {\"x\": 6, \"y\": 6}]");
+
+        ArrayList<String> possibleMoves = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
+        ArrayList<String> expectedResult = new ArrayList<>(Arrays.asList("up", "down", "left"));
+
+        handler.avoidMyBody(testHead, testBody, possibleMoves);
+
+        assertTrue(possibleMoves.size() == 3);
+        assertTrue(possibleMoves.equals(expectedResult));
+    }
 }

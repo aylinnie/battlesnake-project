@@ -104,10 +104,10 @@ public class Snake {
         public Map<String, String> index() {
             Map<String, String> response = new HashMap<>();
             response.put("apiversion", "1");
-            response.put("author", ""); // TODO: Your Battlesnake Username
-            response.put("color", "#D8A7B1"); // TODO: Personalize
-            response.put("head", "default"); // TODO: Personalize
-            response.put("tail", "default"); // TODO: Personalize
+            response.put("author", "aylinnie");
+            response.put("color", "#D8A7B1");
+            response.put("head", "tongue");
+            response.put("tail", "default");
             return response;
         }
 
@@ -149,15 +149,6 @@ public class Snake {
             } catch (JsonProcessingException e) {
                 LOG.error("Error parsing payload", e);
             }
-
-            /*
-             * Example how to retrieve data from the request payload:
-             * 
-             * String gameId = moveRequest.get("game").get("id").asText();
-             * 
-             * int height = moveRequest.get("board").get("height").asInt();
-             * 
-             */
 
             // my snake position
             JsonNode head = moveRequest.get("you").get("head");
@@ -263,22 +254,33 @@ public class Snake {
             return possibleMoves;
         }
 
+        /**
+         * head (X) +1 =/= body part (X)
+         * head (X) -1 =/= body part (X)
+         * head (Y) +1 =/= body part (Y)
+         * head (Y) -1 =/= body part (Y)
+         *
+         * @param head position
+         * @param body position
+         * @param possibleMoves
+         * @return
+         */
         public ArrayList<String> avoidMyBody(JsonNode head, JsonNode body, ArrayList<String> possibleMoves) {
 
-            for (int i = 1; i < body.size(); i++) {
+            // start with i = 2 ignore head and neck
+            for (int i = 2; i < body.size(); i++) {
                 JsonNode bodyPart = body.get(i);
 
-                if (head.get("y").asInt() == bodyPart.get("y").asInt() + 1) {
+                if (bodyPart.get("y").asInt() == head.get("y").asInt() + 1 && bodyPart.get("x").asInt() == head.get("x").asInt()) {
                     possibleMoves.remove("up");
-                } else if (head.get("y").asInt() == bodyPart.get("y").asInt() - 1) {
+                } if (bodyPart.get("y").asInt() == head.get("y").asInt() - 1 && bodyPart.get("x").asInt() == head.get("x").asInt()) {
                     possibleMoves.remove("down");
-                } else if (head.get("x").asInt() == bodyPart.get("x").asInt() + 1) {
+                } if (bodyPart.get("x").asInt() == head.get("x").asInt() + 1 && bodyPart.get("y").asInt() == head.get("y").asInt()) {
                     possibleMoves.remove("right");
-                } else if (head.get("x").asInt() == bodyPart.get("x").asInt() - 1) {
+                } if (bodyPart.get("x").asInt() == head.get("x").asInt() - 1 && bodyPart.get("y").asInt() == head.get("y").asInt()) {
                     possibleMoves.remove("left");
                 }
             }
-
             return possibleMoves;
         }
     }
