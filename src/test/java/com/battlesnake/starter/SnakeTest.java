@@ -7,10 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -34,7 +31,7 @@ public class SnakeTest {
 
         Map<String, String> response = handler.index();
         assertEquals("#D8A7B1", response.get("color"));
-        assertEquals("default", response.get("head"));
+        assertEquals("tongue", response.get("head"));
         assertEquals("default", response.get("tail"));
     }
 
@@ -287,6 +284,46 @@ public class SnakeTest {
         handler.avoidMyBody(testHead, testBody, possibleMoves);
 
         assertTrue(possibleMoves.size() == 3);
+        assertTrue(possibleMoves.equals(expectedResult));
+    }
+
+    @Test
+    void avoidOtherSnakesTest() throws IOException {
+        JsonNode testHead = OBJECT_MAPPER.readTree("{\"x\": 5, \"y\": 5}");
+
+        JsonNode testSnakes = OBJECT_MAPPER.
+                readTree("[" +
+                        "{\"id\":\"snake-508e96ac-94ad-11ea-bb37\",\"name\":\"My Snake\",\"health\":54,\"body\":[{\"x\":5,\"y\":5},{\"x\":6,\"y\":5},{\"x\":7,\"y\":5}],\"latency\":\"111\",\"head\":{\"x\":5,\"y\":5},\"length\":3,\"shout\":\"why are we shouting??\",\"squad\":\"\"}, " +
+                        "{\"id\":\"snake-508e96ac-94ad-11ea-2344\",\"name\":\"Snake 1\",\"health\":54,\"body\":[{\"x\":5,\"y\":4},{\"x\":6,\"y\":4},{\"x\":7,\"y\":4}],\"latency\":\"111\",\"head\":{\"x\":5,\"y\":4},\"length\":3,\"shout\":\"why are we shouting??\",\"squad\":\"\"}, " +
+                        "{\"id\":\"snake-508e96ac-94ad-11ea-3422\",\"name\":\"Snake 2\",\"health\":54,\"body\":[{\"x\":5,\"y\":6},{\"x\":6,\"y\":6},{\"x\":7,\"y\":6}],\"latency\":\"111\",\"head\":{\"x\":5,\"y\":6},\"length\":3,\"shout\":\"why are we shouting??\",\"squad\":\"\"}" +
+                        "]");
+
+        ArrayList<String> possibleMoves = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
+        ArrayList<String> expectedResult = new ArrayList<>(Arrays.asList("left", "right"));
+
+        handler.avoidOtherSnakes(testHead, testSnakes, possibleMoves);
+
+        assertTrue(possibleMoves.size() == 2);
+        assertTrue(possibleMoves.equals(expectedResult));
+    }
+
+    @Test
+    void avoidOtherSnakes2Test() throws IOException {
+        JsonNode testHead = OBJECT_MAPPER.readTree("{\"x\": 5, \"y\": 5}");
+
+        JsonNode testSnakes = OBJECT_MAPPER.
+                readTree("[" +
+                        "{\"id\":\"snake-508e96ac-94ad-11ea-bb37\",\"name\":\"My Snake\",\"health\":54,\"body\":[{\"x\":5,\"y\":5},{\"x\":6,\"y\":5},{\"x\":7,\"y\":5}],\"latency\":\"111\",\"head\":{\"x\":5,\"y\":5},\"length\":3,\"shout\":\"why are we shouting??\",\"squad\":\"\"}, " +
+                        "{\"id\":\"snake-508e96ac-94ad-11ea-2344\",\"name\":\"Snake 1\",\"health\":54,\"body\":[{\"x\":5,\"y\":4},{\"x\":6,\"y\":4},{\"x\":7,\"y\":4}],\"latency\":\"111\",\"head\":{\"x\":5,\"y\":4},\"length\":3,\"shout\":\"why are we shouting??\",\"squad\":\"\"}, " +
+                        "{\"id\":\"snake-508e96ac-94ad-11ea-3422\",\"name\":\"Snake 2\",\"health\":54,\"body\":[{\"x\":4,\"y\":5},{\"x\":4,\"y\":6},{\"x\":4,\"y\":7}],\"latency\":\"111\",\"head\":{\"x\":5,\"y\":6},\"length\":3,\"shout\":\"why are we shouting??\",\"squad\":\"\"}" +
+                        "]");
+
+        ArrayList<String> possibleMoves = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
+        ArrayList<String> expectedResult = new ArrayList<>(Arrays.asList("up", "right"));
+
+        handler.avoidOtherSnakes(testHead, testSnakes, possibleMoves);
+
+        assertTrue(possibleMoves.size() == 2);
         assertTrue(possibleMoves.equals(expectedResult));
     }
 }

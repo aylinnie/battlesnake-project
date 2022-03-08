@@ -169,9 +169,9 @@ public class Snake {
             // avoid my body
             ArrayList<String> lastMoves = avoidMyBody(head, body, newMoves);
 
-            // TODO: Using information from 'moveRequest', don't let your Battlesnake pick a
-            // move
-            // that would collide with another Battlesnake
+            // avoid collide with another Battlesnake
+            JsonNode otherSnakes = moveRequest.get("board").get("snakes");
+            ArrayList<String> moves = avoidOtherSnakes(head, otherSnakes, lastMoves);
 
             // TODO: Using information from 'moveRequest', make your Battlesnake move
             // towards a
@@ -180,8 +180,8 @@ public class Snake {
 
 
             // Choose a random direction to move in
-            final int choice = new Random().nextInt(lastMoves.size());
-            final String move = lastMoves.get(choice);
+            final int choice = new Random().nextInt(moves.size());
+            final String move = moves.get(choice);
 
             LOG.info("MOVE {}", move);
 
@@ -195,8 +195,7 @@ public class Snake {
          * 
          * @param head          JsonNode of the head position e.g. {"x": 0, "y": 0}
          * @param body          JsonNode of x/y coordinates for every segment of a
-         *                      Battlesnake. e.g. [ {"x": 0, "y": 0}, {"x": 1, "y": 0},
-         *                      {"x": 2, "y": 0} ]
+         *                      Battlesnake. e.g. [ {"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 2, "y": 0} ]
          * @param possibleMoves ArrayList of String. Moves to pick from.
          */
         public ArrayList<String> avoidMyNeck(JsonNode head, JsonNode body, ArrayList<String> possibleMoves) {
@@ -281,6 +280,34 @@ public class Snake {
                     possibleMoves.remove("left");
                 }
             }
+            return possibleMoves;
+        }
+
+        public ArrayList<String> avoidOtherSnakes(JsonNode head, JsonNode snakes, ArrayList<String> possibleMoves) {
+            int allSnakes = snakes.size();
+
+            // loop snake array, ignore myself
+            for (int i = 1; i < allSnakes; i++) {
+                JsonNode otherSnake = snakes.get(i);
+
+                // loop snake body coordinates
+                for (int j = 0; j < otherSnake.get("length").asInt(); j++) {
+
+                    JsonNode snakeBody = otherSnake.get("body").get(j);
+
+                    if (snakeBody.get("y").asInt() == head.get("y").asInt() + 1 && snakeBody.get("x").asInt() == head.get("x").asInt()) {
+                        possibleMoves.remove("up");
+                    } if (snakeBody.get("y").asInt() == head.get("y").asInt() - 1 && snakeBody.get("x").asInt() == head.get("x").asInt()) {
+                        possibleMoves.remove("down");
+                    } if (snakeBody.get("x").asInt() == head.get("x").asInt() + 1 && snakeBody.get("y").asInt() == head.get("y").asInt()) {
+                        possibleMoves.remove("right");
+                    } if (snakeBody.get("x").asInt() == head.get("x").asInt() - 1 && snakeBody.get("y").asInt() == head.get("y").asInt()) {
+                        possibleMoves.remove("left");
+                    }
+
+                }
+            }
+
             return possibleMoves;
         }
     }
