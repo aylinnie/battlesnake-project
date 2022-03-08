@@ -265,21 +265,12 @@ public class Snake {
          * @return
          */
         public ArrayList<String> avoidMyBody(JsonNode head, JsonNode body, ArrayList<String> possibleMoves) {
-
             // start with i = 2 ignore head and neck
             for (int i = 2; i < body.size(); i++) {
                 JsonNode bodyPart = body.get(i);
-
-                if (bodyPart.get("y").asInt() == head.get("y").asInt() + 1 && bodyPart.get("x").asInt() == head.get("x").asInt()) {
-                    possibleMoves.remove("up");
-                } if (bodyPart.get("y").asInt() == head.get("y").asInt() - 1 && bodyPart.get("x").asInt() == head.get("x").asInt()) {
-                    possibleMoves.remove("down");
-                } if (bodyPart.get("x").asInt() == head.get("x").asInt() + 1 && bodyPart.get("y").asInt() == head.get("y").asInt()) {
-                    possibleMoves.remove("right");
-                } if (bodyPart.get("x").asInt() == head.get("x").asInt() - 1 && bodyPart.get("y").asInt() == head.get("y").asInt()) {
-                    possibleMoves.remove("left");
-                }
+                possibleMoves = avoidDifferentThings(bodyPart, head, possibleMoves);
             }
+
             return possibleMoves;
         }
 
@@ -292,20 +283,23 @@ public class Snake {
 
                 // loop snake body coordinates
                 for (int j = 0; j < otherSnake.get("length").asInt(); j++) {
-
                     JsonNode snakeBody = otherSnake.get("body").get(j);
-
-                    if (snakeBody.get("y").asInt() == head.get("y").asInt() + 1 && snakeBody.get("x").asInt() == head.get("x").asInt()) {
-                        possibleMoves.remove("up");
-                    } if (snakeBody.get("y").asInt() == head.get("y").asInt() - 1 && snakeBody.get("x").asInt() == head.get("x").asInt()) {
-                        possibleMoves.remove("down");
-                    } if (snakeBody.get("x").asInt() == head.get("x").asInt() + 1 && snakeBody.get("y").asInt() == head.get("y").asInt()) {
-                        possibleMoves.remove("right");
-                    } if (snakeBody.get("x").asInt() == head.get("x").asInt() - 1 && snakeBody.get("y").asInt() == head.get("y").asInt()) {
-                        possibleMoves.remove("left");
-                    }
-
+                    possibleMoves = avoidDifferentThings(snakeBody, head, possibleMoves);
                 }
+            }
+
+            return possibleMoves;
+        }
+
+        public ArrayList<String> avoidDifferentThings(JsonNode bodyPart, JsonNode head, ArrayList<java.lang.String> possibleMoves) {
+            if (bodyPart.get("y").asInt() == head.get("y").asInt() + 1 && bodyPart.get("x").asInt() == head.get("x").asInt()) {
+                possibleMoves.remove("up");
+            } if (bodyPart.get("y").asInt() == head.get("y").asInt() - 1 && bodyPart.get("x").asInt() == head.get("x").asInt()) {
+                possibleMoves.remove("down");
+            } if (bodyPart.get("x").asInt() == head.get("x").asInt() + 1 && bodyPart.get("y").asInt() == head.get("y").asInt()) {
+                possibleMoves.remove("right");
+            } if (bodyPart.get("x").asInt() == head.get("x").asInt() - 1 && bodyPart.get("y").asInt() == head.get("y").asInt()) {
+                possibleMoves.remove("left");
             }
 
             return possibleMoves;
