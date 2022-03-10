@@ -326,4 +326,79 @@ public class SnakeTest {
         assertTrue(possibleMoves.size() == 2);
         assertTrue(possibleMoves.equals(expectedResult));
     }
+
+    @Test
+    void avoidOtherSnakesHeadTest() throws IOException {
+        JsonNode testHead = OBJECT_MAPPER.readTree("{\"x\": 5, \"y\": 5}");
+
+        JsonNode testSnakes = OBJECT_MAPPER.
+                readTree("[" +
+                        "{\"id\":\"snake-508e96ac-94ad-11ea-bb37\",\"name\":\"My Snake\",\"health\":54,\"body\":[{\"x\":5,\"y\":5},{\"x\":6,\"y\":5},{\"x\":7,\"y\":5}],\"latency\":\"111\",\"head\":{\"x\":5,\"y\":5},\"length\":3,\"shout\":\"why are we shouting??\",\"squad\":\"\"}, " +
+                        "{\"id\":\"snake-508e96ac-94ad-11ea-2344\",\"name\":\"Snake 1\",\"health\":54,\"body\":[{\"x\":4,\"y\":4},{\"x\":5,\"y\":4},{\"x\":6,\"y\":4}],\"latency\":\"111\",\"head\":{\"x\":4,\"y\":4},\"length\":3,\"shout\":\"why are we shouting??\",\"squad\":\"\"} " +
+                        "]");
+
+        ArrayList<String> possibleMoves = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
+        ArrayList<String> expectedResult = new ArrayList<>(Arrays.asList("up", "right"));
+
+        handler.avoidOtherSnakes(testHead, testSnakes, possibleMoves);
+
+        assertTrue(possibleMoves.size() == 2);
+        assertTrue(possibleMoves.equals(expectedResult));
+    }
+
+    @Test
+    void avoidOtherSnakesHead2Test() throws IOException {
+        JsonNode testHead = OBJECT_MAPPER.readTree("{\"x\": 5, \"y\": 5}");
+
+        JsonNode testSnakes = OBJECT_MAPPER.
+                readTree("[" +
+                        "{\"id\":\"snake-508e96ac-94ad-11ea-bb37\",\"name\":\"My Snake\",\"health\":54,\"body\":[{\"x\":5,\"y\":5},{\"x\":6,\"y\":5},{\"x\":7,\"y\":5}],\"latency\":\"111\",\"head\":{\"x\":5,\"y\":5},\"length\":3,\"shout\":\"why are we shouting??\",\"squad\":\"\"}, " +
+                        "{\"id\":\"snake-508e96ac-94ad-11ea-2344\",\"name\":\"Snake 1\",\"health\":54,\"body\":[{\"x\":4,\"y\":6},{\"x\":4,\"y\":7},{\"x\":4,\"y\":8}],\"latency\":\"111\",\"head\":{\"x\":4,\"y\":6},\"length\":3,\"shout\":\"why are we shouting??\",\"squad\":\"\"} " +
+                        "]");
+
+        ArrayList<String> possibleMoves = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
+        ArrayList<String> expectedResult = new ArrayList<>(Arrays.asList("down", "right"));
+
+        handler.avoidOtherSnakes(testHead, testSnakes, possibleMoves);
+
+        assertTrue(possibleMoves.size() == 2);
+        assertTrue(possibleMoves.equals(expectedResult));
+    }
+
+    @Test
+    void avoidOtherSnakesHead3Test() throws IOException {
+        JsonNode testHead = OBJECT_MAPPER.readTree("{\"x\": 5, \"y\": 5}");
+
+        JsonNode testSnakes = OBJECT_MAPPER.
+                readTree("[" +
+                        "{\"id\":\"snake-508e96ac-94ad-11ea-bb37\",\"name\":\"My Snake\",\"health\":54,\"body\":[{\"x\":5,\"y\":5},{\"x\":5,\"y\":4},{\"x\":5,\"y\":3}],\"latency\":\"111\",\"head\":{\"x\":5,\"y\":5},\"length\":3,\"shout\":\"why are we shouting??\",\"squad\":\"\"}, " +
+                        "{\"id\":\"snake-508e96ac-94ad-11ea-2344\",\"name\":\"Snake 1\",\"health\":54,\"body\":[{\"x\":5,\"y\":7},{\"x\":6,\"y\":7},{\"x\":7,\"y\":7}],\"latency\":\"111\",\"head\":{\"x\":5,\"y\":7},\"length\":3,\"shout\":\"why are we shouting??\",\"squad\":\"\"} " +
+                        "]");
+
+        ArrayList<String> possibleMoves = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
+        ArrayList<String> expectedResult = new ArrayList<>(Arrays.asList("down", "left", "right"));
+
+        handler.avoidOtherSnakes(testHead, testSnakes, possibleMoves);
+
+        assertTrue(possibleMoves.size() == 3);
+        assertTrue(possibleMoves.equals(expectedResult));
+    }
+
+    @Test
+    void checkOtherSnakesHeadPositionForTheNextRoundTest() throws IOException {
+        JsonNode otherSnakeHead = OBJECT_MAPPER.readTree("{\"x\": 5, \"y\": 7}");
+
+        boolean expectedResult = handler.catchPossibleSnakesHeadPositions(4, 5, otherSnakeHead);
+
+        assertTrue(!expectedResult);
+    }
+
+    @Test
+    void checkOtherSnakesHeadPositionForTheNextRound2Test() throws IOException {
+        JsonNode otherSnakeHead = OBJECT_MAPPER.readTree("{\"x\": 5, \"y\": 7}");
+
+        boolean expectedResult = handler.catchPossibleSnakesHeadPositions(5, 6, otherSnakeHead);
+
+        assertTrue(expectedResult);
+    }
 }

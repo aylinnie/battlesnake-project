@@ -281,7 +281,27 @@ public class Snake {
             for (int i = 1; i < allSnakes; i++) {
                 JsonNode otherSnake = snakes.get(i);
 
-                // loop snake body coordinates
+                // avoid other snakes head in the next possible position
+                JsonNode otherSnakeHead = otherSnake.get("head");
+
+                // x - 1
+                if (catchPossibleSnakesHeadPositions(head.get("x").asInt() - 1, head.get("y").asInt(), otherSnakeHead)) {
+                    possibleMoves.remove("left");
+                }
+                // x + 1
+                if (catchPossibleSnakesHeadPositions(head.get("x").asInt() + 1, head.get("y").asInt(), otherSnakeHead)) {
+                    possibleMoves.remove("right");
+                }
+                // y - 1
+                if (catchPossibleSnakesHeadPositions(head.get("x").asInt(), head.get("y").asInt() - 1, otherSnakeHead)) {
+                    possibleMoves.remove("down");
+                }
+                // y + 1
+                if (catchPossibleSnakesHeadPositions(head.get("x").asInt(), head.get("y").asInt() + 1, otherSnakeHead)) {
+                    possibleMoves.remove("up");
+                }
+
+                // loop all snake body parts
                 for (int j = 0; j < otherSnake.get("length").asInt(); j++) {
                     JsonNode snakeBody = otherSnake.get("body").get(j);
                     possibleMoves = avoidDifferentThings(snakeBody, head, possibleMoves);
@@ -303,6 +323,22 @@ public class Snake {
             }
 
             return possibleMoves;
+        }
+
+        public boolean catchPossibleSnakesHeadPositions(int myX, int myY, JsonNode otherSnakesHead) {
+            boolean someoneCouldCatchMyHead = false;
+
+            if (myX == otherSnakesHead.get("x").asInt() - 1 && myY == otherSnakesHead.get("y").asInt()) {
+                someoneCouldCatchMyHead = true;
+            } else if (myX == otherSnakesHead.get("x").asInt() + 1 && myY == otherSnakesHead.get("y").asInt()) {
+                someoneCouldCatchMyHead = true;
+            } else if (myX == otherSnakesHead.get("x").asInt() && myY == otherSnakesHead.get("y").asInt() - 1) {
+                someoneCouldCatchMyHead = true;
+            } else if (myX == otherSnakesHead.get("x").asInt() && myY == otherSnakesHead.get("y").asInt() + 1) {
+                someoneCouldCatchMyHead = true;
+            }
+
+            return someoneCouldCatchMyHead;
         }
     }
 
